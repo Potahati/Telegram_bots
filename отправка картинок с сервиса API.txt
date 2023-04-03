@@ -1,0 +1,19 @@
+from pprint import pprint
+import requests
+
+API_URL: str = "https://api.telegram.org/bot"
+API_URL_JOKE: str = " https://random.dog/woof.json"
+offset = -2
+i = 0
+while i < 1000:
+    updates = requests.get(f'{API_URL}{BOT_TOKEN}/getUpdates?offset={offset + 1}').json()
+    if updates['result']:
+        for result in updates['result']:
+            offset = result['update_id']
+            chat_id = result['message']['from']['id']
+        random_dog = requests.get(API_URL_JOKE).json()
+        dog_link = random_dog['url']
+        requests.get(f"{API_URL}{BOT_TOKEN}/sendPhoto?chat_id={chat_id}&photo={dog_link}")
+        print(offset)
+    print(updates['result'])
+    i += 1
